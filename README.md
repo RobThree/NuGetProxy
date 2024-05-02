@@ -1,6 +1,8 @@
 # <img src="logo.svg" width="32"> NuGet proxy
 
-This is a simple proxy for NuGet servers that insist on requiring authentication (looking at you, GitLab) but where you want to allow public access to the packages. This project uses [YARP](https://microsoft.github.io/reverse-proxy/index.html) to (reverse) proxy requests to the NuGet server and adds an accesstoken to each request. Any responses to `*.json` url's that return an `application/json` response will then be rewritten to contain the URL of the proxy instead of the actual NuGet server behind the proxy so everything keeps working as expected.
+This is a simple proxy for NuGet servers that insist on requiring authentication ([looking at you, GitLab](https://gitlab.com/gitlab-org/gitlab/-/issues/293684)) but where you want to allow public access to the packages. This project uses [YARP](https://microsoft.github.io/reverse-proxy/index.html) to (reverse) proxy requests to the NuGet server and adds an accesstoken to each request. Any responses to `*.json` URLs that return an `application/json` response will then be rewritten to contain the URL of the proxy instead of the actual NuGet server behind the proxy so everything keeps working as expected.
+
+Since this project doesn't have a clue on what response objects exist, replacements of the url's is done in a simple "find and replace" fashion, treating the JSON response as a string. This _could_, in potention, be dangerous or could replace URLs that shouldn't be replaced (like URLs in metadata). Since I can't be bothered to implement all response objects and, as a consequence, keep up with changes in NuGet, I opted to go for this _"quick'n'dirty"_ route. It works for me. I may, someday, improve this but for now it will do. Just be aware. And [let me know](https://github.com/RobThree/NuGetProxy/issues/new) if you run into any issues.
 
 ## Usage
 
