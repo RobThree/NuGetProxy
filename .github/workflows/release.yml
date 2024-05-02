@@ -1,0 +1,63 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+env:
+  DOTNET_VERSION: '8.0.x'
+jobs:
+  release:
+    name: Release
+    strategy:
+      matrix:
+        kind: ['linux', 'windows', 'macos-x64', 'macos-arm64']
+        include:
+          - kind: linux
+            os: ubuntu-latest
+            target: linux-x64
+          - kind: windows
+            os: windows-latest
+            target: win-x64
+          - kind: macos-x64
+            os: macos-latest
+            target: osx-x64
+          - kind: macos-arm64
+            os: macos-latest
+            target: osx-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="nugetproxy-$tag-${{ matrix.target }}"
+
+          # Build everything
+          dotnet restore
+          dotnet publish NuGetProxy --runtime ${{ matrix.target }} --configuration Release --property:PublishDir="../artifacts" --self-contained false
+
+          # Pack files
+          if [[ "${{ matrix.target }}" == win-* ]]; then
+            # Pack to zip for Windows
+            7z a -tzip "${release_name}.zip" "./artifacts/*"
+          else
+            (cd artifacts && tar -czvf "../${release_name}.tar.gz" *)
+          fi
+
+          # Delete output directory
+          rm -r "./artifacts"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            nugetproxy*.zip
+            nugetproxy*.tar.gz
