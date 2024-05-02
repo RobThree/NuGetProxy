@@ -75,7 +75,7 @@ No, the proxy is read-only. If you want to push packages, you will need to push 
 You can use HTTPS & TLS; documentation on how to configure YARP can be found [here](https://microsoft.github.io/reverse-proxy/articles/https-tls.html). Basically, you'd add something like this:
 
 ```json
-Https": {
+"Https": {
     "Url": "https://my.nuget.org:5001",
     "Certificate": {
         "Path": "my.nuget.org.pfx",
