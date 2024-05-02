@@ -1,4 +1,4 @@
-# NuGet proxy
+# <img src="logo.svg" width="32"> NuGet proxy
 
 This is a simple proxy for NuGet servers that insist on requiring authentication (looking at you, GitLab) but where you want to allow public access to the packages. This project uses [YARP](https://microsoft.github.io/reverse-proxy/index.html) to (reverse) proxy requests to the NuGet server and adds an accesstoken to each request. Any responses to `*.json` url's that return an `application/json` response will then be rewritten to contain the URL of the proxy instead of the actual NuGet server behind the proxy so everything keeps working as expected.
 
