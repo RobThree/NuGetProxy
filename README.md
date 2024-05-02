@@ -56,9 +56,9 @@ The values you need to set / change are the following:
 * `Url`: The URL(s)/port(s) at which the proxy will be listening.
 * `PathBase`: (OPTIONAL) The path base that the proxy will be using. This is useful if you want to host multiple proxies on the same server.
 * `ApiKey`: The API key that will be used to authenticate with the NuGet server.
-* `Address`: The URL of the NuGet server NuGet feed.
+* `Address`: The URL of the NuGet server feed.
 
-Next, start the proxy and configure your NuGet client to use the proxy: set the `source` to the URL of the proxy + `PathBase` and add `index.json` to the end of the URL. For example: if you configured the `Urls` as `http://localhost:5000/` and `PathBase` as `MyNuGet` then set the NuGet source for your client to `http://localhost:5000/MyNuGet/index.json`.
+Next, start the proxy and configure your NuGet client to use the proxy: set the `source` to the URL of the proxy + `PathBase` and add `index.json` to the end of the URL. For example: if you configured the `Url` as `http://localhost:5000/` and `PathBase` as `MyNuGet` then set the NuGet source for your client to `http://localhost:5000/MyNuGet/index.json`.
 
 ## What accesstoken?
 
