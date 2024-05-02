@@ -12,15 +12,7 @@ To configure the proxy, change the appsettings:
     "Endpoints": {
       "Http": {
         "Url": "http://my.nuget.org:5000"
-      },
-      //"Https": {
-      //  "Url": "https://my.nuget.org:5001",
-      //  "Certificate": {
-      //    "Path": "my.nuget.org.pfx",
-      //    "Password": "ExAmplePa$$w0rd*&"
-      //  }
-      //}
-    }
+      }
   },
   "PathBase": "/NuGet",
   "ReverseProxy": {
@@ -80,4 +72,14 @@ No, the proxy is read-only. If you want to push packages, you will need to push 
 
 ## HTTPS & TLS
 
-You can use HTTPS & TLS; documentation on how to configure YARP can be found [here](https://microsoft.github.io/reverse-proxy/articles/https-tls.html).
+You can use HTTPS & TLS; documentation on how to configure YARP can be found [here](https://microsoft.github.io/reverse-proxy/articles/https-tls.html). Basically, you'd add something like this:
+
+```json
+Https": {
+    "Url": "https://my.nuget.org:5001",
+    "Certificate": {
+        "Path": "my.nuget.org.pfx",
+        "Password": "ExAmplePa$$w0rd*&"
+    }
+}
+```
