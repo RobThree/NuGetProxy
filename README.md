@@ -62,9 +62,9 @@ Next, start the proxy and configure your NuGet client to use the proxy: set the 
 
 ## What accesstoken?
 
-For GitLab, you can create an access token by going to the NuGet repository -> Settings -> Access Tokens -> Add new Token. Give the token a name (like `NuGetProxy`), expiration data and give `read_api` permissions.
+For GitLab, you can create an access token by going to the NuGet repository -> Settings -> Access Tokens -> Add new Token. Give the token a name (like `NuGetProxy`), expiration date and give `read_api` permissions.
 
-Note that when the token expires, you will need to update the token in the appsettings and restart the proxy.
+Note that when the token expires, you _will_ need to update the token in the appsettings and restart the proxy.
 
 ## Can I push via the proxy?
 
