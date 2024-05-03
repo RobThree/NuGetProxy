@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Yarp.ReverseProxy.Configuration;
@@ -16,6 +17,10 @@ internal class Program
     {
         var webappbuilder = WebApplication.CreateBuilder(args);
         webappbuilder.Configuration.AddUserSecrets<Program>();
+
+        webappbuilder.Host
+            .UseWindowsService()
+            .UseSystemd();
 
         var config = webappbuilder.Configuration;
         var pathbase = config.GetValue<string>("PathBase") ?? string.Empty;
