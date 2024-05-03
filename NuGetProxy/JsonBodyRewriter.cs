@@ -1,16 +1,19 @@
 using System.Text.Json;
 
-public class JsonBodyRewriter
+namespace NuGetProxy;
+
+public static class JsonBodyRewriter
 {
     public static async Task ReplaceStringInJsonAsync(Stream jsonStream, Stream outStream, string findValue, string replaceValue, CancellationToken cancellationToken = default)
     {
         await using var writer = new Utf8JsonWriter(outStream);
         var doc = await JsonDocument.ParseAsync(jsonStream, default, cancellationToken);
-        
+
         RecurseJson(doc.RootElement, writer, findValue, replaceValue, cancellationToken);
     }
 
-    private static void RecurseJson(JsonElement element, Utf8JsonWriter writer, string findValue, string replaceValue, CancellationToken cancellationToken = default) {
+    private static void RecurseJson(JsonElement element, Utf8JsonWriter writer, string findValue, string replaceValue, CancellationToken cancellationToken = default)
+    {
         if (cancellationToken.IsCancellationRequested)
         {
             return;
