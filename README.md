@@ -114,7 +114,7 @@ Below are instructions on how to run the proxy as a service on Linux and Windows
 	[Install]
 	WantedBy=multi-user.target
     ```
-5. Make the executable exacutable: `chmod +x /usr/local/bin/nugetproxy/NuGetProxy`
+5. Make the executable executable: `chmod +x /usr/local/bin/nugetproxy/NuGetProxy`
 6. Enable the service: `systemctl enable nugetproxy`
 7. Run `systemctl daemon-reload` for systemd to pick up the new service
 8. You can now start/stop service like any other service: `service nugetproxy start`
