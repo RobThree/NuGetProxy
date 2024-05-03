@@ -4,12 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Text;
 using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
 using Yarp.ReverseProxy.Transforms.Builder;
 
-namespace ConsoleApp5;
+namespace NuGetProxy;
 
 internal class Program
 {
@@ -38,22 +37,22 @@ internal class Program
                         && TryGetDestinationConfig(transformContext, "NuGet", out var destconfig))
                     {
                         // Read response body
-                        using var reader = new StreamReader(await responseContext.ProxyResponse!.Content.ReadAsStreamAsync(responseContext.CancellationToken));
-                        var body = await reader.ReadToEndAsync(responseContext.CancellationToken);
+                        using var proxyresponse = await responseContext.ProxyResponse!.Content.ReadAsStreamAsync(responseContext.CancellationToken);
+                        var response = responseContext.HttpContext.Response.Body;
 
-                        if (!string.IsNullOrEmpty(body))
-                        {
-                            responseContext.SuppressResponseBody = true;
+                        responseContext.SuppressResponseBody = true;
 
-                            // Rewrite urls in response body
-                            var baseuri = GetBaseUri(responseContext.HttpContext.Request, pathbase);
-                            body = body.Replace(destconfig.Address, baseuri, StringComparison.OrdinalIgnoreCase);
+                        responseContext.HttpContext.Response.Headers.Remove("Content-Length");
 
-                            // Set new response length
-                            responseContext.HttpContext.Response.Headers.ContentLength = body.Length;
-                            // Output rewritten response body
-                            await responseContext.HttpContext.Response.Body.WriteAsync(Encoding.UTF8.GetBytes(body), responseContext.CancellationToken);
-                        }
+                        // Rewrite urls in response body
+                        var baseuri = GetBaseUri(responseContext.HttpContext.Request, pathbase);
+                        await JsonBodyRewriter.ReplaceStringInJsonAsync(
+                            proxyresponse,
+                            response,
+                            destconfig.Address,
+                            baseuri,
+                            responseContext.CancellationToken
+                        );
                     }
                 });
             });
